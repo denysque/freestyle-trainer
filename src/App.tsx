@@ -10,6 +10,7 @@ import { createBeatPlayer, type BeatPlayer, BEAT_PRESETS } from './lib/beat';
 import { createRecorder, type VoiceRecorder } from './lib/recorder';
 import { countSyllables } from './lib/rhymes';
 import { pluralSyllables, formatTime } from './lib/format';
+import { initTelegram, getTg } from './lib/telegram';
 
 // ---------------------------------------------------------------------------
 // Типы и константы
@@ -96,11 +97,17 @@ export default function App() {
   });
 
   // --- тема ---
+  // Приоритет: 1) сохранённый выбор пользователя, 2) тема из Telegram (если в TG),
+  // 3) тёмная по умолчанию.
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem(THEME_KEY);
     if (saved === 'light' || saved === 'dark') return saved;
+    const tgScheme = window.Telegram?.WebApp?.colorScheme;
+    if (tgScheme === 'light' || tgScheme === 'dark') return tgScheme;
     return 'dark';
   });
+  // Если пользователь сам нажимал переключатель — больше не следуем за TG-темой.
+  const userOverrodeTheme = useRef(localStorage.getItem(THEME_KEY) !== null);
 
   // --- таймер ---
   const [timerSec, setTimerSec] = useState(60);
@@ -128,10 +135,21 @@ export default function App() {
   useEffect(() => {
     playerRef.current = createBeatPlayer(BEAT_PRESETS[0].id);
     recorderRef.current = createRecorder();
+
+    // Telegram Mini App: ready() + expand() + подписка на смену темы.
+    const tg = initTelegram();
+    const handleThemeChange = () => {
+      if (userOverrodeTheme.current) return;
+      const next = tg?.colorScheme;
+      if (next === 'light' || next === 'dark') setTheme(next);
+    };
+    tg?.onEvent('themeChanged', handleThemeChange);
+
     return () => {
       playerRef.current?.stop();
       playerRef.current = null;
       recorderRef.current = null;
+      tg?.offEvent('themeChanged', handleThemeChange);
     };
   }, []);
 
@@ -227,6 +245,7 @@ export default function App() {
   async function rollPair() {
     setLoading([true, true]);
     setSlots([null, null]);
+    getTg()?.HapticFeedback?.impactOccurred('medium');
     const [a, b] = await Promise.all([loadSlot(0), loadSlot(1)]);
     setSlots([a, b]);
     setLoading([false, false]);
@@ -366,7 +385,11 @@ export default function App() {
         <div className="header-actions">
           <button
             className="icon-btn"
-            onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+            onClick={() => {
+              userOverrodeTheme.current = true;
+              setTheme(t => t === 'dark' ? 'light' : 'dark');
+              getTg()?.HapticFeedback?.impactOccurred('light');
+            }}
             aria-label="Сменить тему"
             title={theme === 'dark' ? 'LIGHT MODE' : 'DARK MODE'}
           >
