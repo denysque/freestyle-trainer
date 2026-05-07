@@ -1,0 +1,926 @@
+@import "tailwindcss";
+
+/* ───────────────────────────── ПАЛИТРА ──────────────────────────────────
+   Off-White inspired:
+   - Чёрная база, индустриальный жёлтый #ffec00 как сигнал
+   - Белый текст, серый для второстепенного
+   - Минимум закруглений, максимум типографики
+   ────────────────────────────────────────────────────────────────────── */
+
+@theme inline {
+  --color-bg:          #0b0b0f;
+  --color-surface:     #16161d;
+  --color-surface-2:   #1f1f29;
+  --color-text:        #f1efe6;
+  --color-muted:       #7a7a8c;
+  --color-accent:      #ff6b3d;
+  --color-accent-soft: rgba(255, 107, 61, 0.18);
+  --color-on-accent:   #1a1108;
+  --color-line:        rgba(255, 255, 255, 0.08);
+  --color-danger:      #ff4d4d;
+  --color-bg-overlay:  rgba(11, 11, 15, 0.92);
+
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/* Светлая тема — переопределяем переменные на светлой палитре.
+   Акцент (оранжевый) и текст на нём — те же. */
+[data-theme="light"] {
+  --color-bg:          #f4ede4;
+  --color-surface:     #ebe4d9;
+  --color-surface-2:   #d8d0c1;
+  --color-text:        #14110d;
+  --color-muted:       #6b6557;
+  --color-accent:      #ff6b3d;
+  --color-accent-soft: rgba(255, 107, 61, 0.18);
+  --color-on-accent:   #1a1108;
+  --color-line:        rgba(20, 17, 13, 0.14);
+  --color-danger:      #d92626;
+  --color-bg-overlay:  rgba(244, 237, 228, 0.92);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-feature-settings: 'ss01' on, 'cv11' on;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  padding: 0;
+}
+
+a { color: inherit; }
+
+/* ───────────────────────────── РАЗМЕТКА ───────────────────────────────── */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 24px 18px 110px;
+  gap: 18px;
+  position: relative;
+}
+
+/* Угловые «технические» подписи в духе Off-White */
+.app::before {
+  content: 'C/O FREESTYLE BY @TELLYCHKO  "SAINT-PETERSBURG"  ©2026';
+  position: absolute;
+  top: 6px;
+  left: 18px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+
+.app::after {
+  content: 'NOT FOR SALE';
+  position: absolute;
+  top: 6px;
+  right: 18px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: 22px;
+  border-bottom: 1px solid var(--color-line);
+  padding-bottom: 14px;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.brand span {
+  color: var(--color-accent);
+}
+
+/* Метки в «"кавычках"» — главная фишка Virgil */
+.tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+}
+
+.tag.accent {
+  color: var(--color-accent);
+}
+
+/* ───────────────────────────── ICON BTN ───────────────────────────────── */
+
+.header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-line);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.icon-btn:hover {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent);
+}
+
+/* ───────────────────────────── СЛОЖНОСТЬ ──────────────────────────────── */
+
+.difficulty-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.difficulty-hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  padding: 0 4px;
+}
+
+.difficulty {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--color-line);
+}
+
+.difficulty-btn {
+  flex: 1;
+  padding: 12px 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  border-right: 1px solid var(--color-line);
+  background: transparent;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.difficulty-btn:last-child { border-right: 0; }
+
+.difficulty-btn.active {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.difficulty-btn::before { content: '"'; }
+.difficulty-btn::after  { content: '"'; }
+
+/* ───────────────────────────── ИНТРО ──────────────────────────────────── */
+
+.intro {
+  border: 1px solid var(--color-line);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+
+.intro::before {
+  content: '"INSTRUCTION"  №01';
+  position: absolute;
+  top: -8px;
+  left: 18px;
+  background: var(--color-bg);
+  padding: 0 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.intro-title {
+  display: none;
+}
+
+.intro-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+.intro-text b {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 700;
+  padding: 0 4px;
+}
+
+.intro-example {
+  border-left: 3px solid var(--color-accent);
+  padding: 4px 0 4px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.intro-line b {
+  color: var(--color-text);
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
+/* ───────────────────────────── СЛОТЫ ──────────────────────────────────── */
+
+.slots {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.slot {
+  border: 1px solid var(--color-line);
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.slot-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.slot-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+}
+
+.reroll-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-line);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, background 0.12s ease, color 0.12s ease;
+}
+
+.reroll-btn:hover:not(:disabled) {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent);
+}
+
+.reroll-btn:active:not(:disabled) {
+  transform: rotate(180deg);
+}
+
+.reroll-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.slot-word {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 9vw, 48px);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  word-break: break-word;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.slot-syl {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.slot-def {
+  font-size: 12px;
+  color: var(--color-muted);
+  line-height: 1.5;
+  padding-top: 2px;
+  border-top: 1px dashed var(--color-line);
+  margin-top: 4px;
+  padding-top: 8px;
+}
+
+.slot-rhymes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+  min-height: 36px;
+}
+
+/* ───────────────────────────── РИФМЫ ──────────────────────────────────── */
+
+.rhyme {
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 0;
+  border: 1px solid var(--color-line);
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  text-transform: lowercase;
+}
+
+.rhyme::before { content: '"'; opacity: 0.6; }
+.rhyme::after  { content: '"'; opacity: 0.6; }
+
+.rhyme:hover {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent);
+}
+
+.rhymes-empty {
+  font-family: var(--font-mono);
+  color: var(--color-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 10px 0;
+}
+
+/* ───────────────────────────── ОСНОВНАЯ КНОПКА ────────────────────────── */
+
+.btn-randomize {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  border-radius: 0;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: transform 0.06s ease, opacity 0.2s ease;
+  position: relative;
+}
+
+.btn-randomize::before {
+  content: '→';
+  font-weight: 800;
+}
+
+.btn-randomize:active {
+  transform: translate(2px, 2px);
+}
+
+.btn-randomize:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-randomize.refresh {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-line);
+}
+
+.btn-randomize.refresh::before { color: var(--color-accent); }
+
+/* ───────────────────────────── ТАЙМЕР ─────────────────────────────────── */
+
+.timer-bar {
+  border: 1px solid var(--color-line);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+.timer-bar::before {
+  content: '"TIMER"';
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  background: var(--color-bg);
+  padding: 0 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.timer-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.timer-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-line);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.timer-toggle.on {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent);
+}
+
+.timer-display {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  flex: 1;
+  color: var(--color-text);
+}
+
+.timer-presets {
+  display: flex;
+  gap: 4px;
+}
+
+.timer-preset {
+  padding: 8px 10px;
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid var(--color-line);
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}
+
+.timer-preset.active {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent);
+}
+
+.timer-progress {
+  height: 3px;
+  background: var(--color-surface-2);
+  overflow: hidden;
+}
+
+.timer-progress-bar {
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 0.1s linear;
+}
+
+/* ───────────────────────────── ЗАПИСЬ ─────────────────────────────────── */
+
+.recorder {
+  border: 1px solid var(--color-line);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+
+.recorder::before {
+  content: '"REC"';
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  background: var(--color-bg);
+  padding: 0 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.recorder-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.record-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  background: transparent;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.record-btn.on {
+  background: var(--color-danger);
+  color: var(--color-text);
+  animation: rec-pulse 1.2s ease-in-out infinite;
+}
+
+.record-btn:active {
+  transform: scale(0.96);
+}
+
+@keyframes rec-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 56, 56, 0.45); }
+  50%      { box-shadow: 0 0 0 12px rgba(255, 56, 56, 0); }
+}
+
+.recorder-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.recorder-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+}
+
+.recorder-state {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+}
+
+.recordings {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.recording {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--color-line);
+  padding: 8px 10px;
+}
+
+.recording audio {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+}
+
+.recording-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.recording-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.recording-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid var(--color-line);
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.recording-btn:hover {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent);
+}
+
+.recording-btn.danger:hover {
+  background: var(--color-danger);
+  color: var(--color-text);
+  border-color: var(--color-danger);
+}
+
+/* ───────────────────────────── TOAST ──────────────────────────────────── */
+
+.toast {
+  position: fixed;
+  bottom: calc(110px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  padding: 10px 16px;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  z-index: 50;
+  pointer-events: none;
+  animation: toast-in 0.18s ease;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ───────────────────────────── CREDIT ─────────────────────────────────── */
+
+.credit {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  padding: 16px 0 8px;
+  margin-top: auto;
+  border-top: 1px solid var(--color-line);
+}
+
+.credit a {
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 700;
+  border-bottom: 1px solid var(--color-accent);
+  padding-bottom: 1px;
+  transition: color 0.12s ease;
+}
+
+.credit a:hover {
+  color: var(--color-accent);
+}
+
+/* ───────────────────────────── ПЛЕЕР ──────────────────────────────────── */
+
+.player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-bg-overlay);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--color-line);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+
+/* Жёлто-чёрная индустриальная полоса под плеером */
+.player::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-accent) 0 12px,
+    var(--color-bg) 12px 24px
+  );
+}
+
+.player-inner {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-btn {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.06s ease;
+}
+
+.player-btn:active {
+  transform: scale(0.94);
+}
+
+.player-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.player-track {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.player-state {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--color-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.preset-switch {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.preset-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid var(--color-line);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.preset-btn:hover {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent);
+}
+
+.tempo {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.tempo-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid var(--color-line);
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tempo-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  min-width: 28px;
+  text-align: center;
+}
+
+/* ───────────────────────────── A11Y / RESPONSIVE ──────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-randomize,
+  .rhyme,
+  .player-btn,
+  .tempo-btn,
+  .preset-btn,
+  .reroll-btn,
+  .icon-btn,
+  .timer-toggle,
+  .timer-preset,
+  .difficulty-btn,
+  .recording-btn {
+    transition: none !important;
+  }
+  .record-btn.on { animation: none !important; }
+}
+
+@media (max-width: 420px) {
+  .app::before, .app::after { font-size: 8px; }
+  .player-inner { gap: 6px; }
+  .player-btn { width: 40px; height: 40px; }
+}
