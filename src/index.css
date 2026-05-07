@@ -825,12 +825,22 @@ a { color: inherit; }
 }
 
 .player-track {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.player-track-name {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .player-state {
@@ -841,25 +851,19 @@ a { color: inherit; }
   text-transform: uppercase;
 }
 
-.preset-switch {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
 .preset-btn {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   border-radius: 0;
   background: transparent;
   border: 1px solid var(--color-line);
   color: var(--color-text);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   transition: background 0.12s ease, color 0.12s ease;
 }
 

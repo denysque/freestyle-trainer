@@ -556,14 +556,14 @@ export default function App() {
             {playing ? '❚❚' : '▶'}
           </button>
           <div className="player-meta">
-            <div className="player-track">"{preset.name.toUpperCase()}"</div>
+            <div className="player-track">
+              <button className="preset-btn" onClick={() => shiftPreset(-1)} aria-label="Предыдущий бит">‹</button>
+              <span className="player-track-name">"{preset.name.toUpperCase()}"</span>
+              <button className="preset-btn" onClick={() => shiftPreset(1)} aria-label="Следующий бит">›</button>
+            </div>
             <div className="player-state">
               {playing ? 'PLAY' : 'STOP'} · {String(presetIdx + 1).padStart(2, '0')}/{String(BEAT_PRESETS.length).padStart(2, '0')}
             </div>
-          </div>
-          <div className="preset-switch">
-            <button className="preset-btn" onClick={() => shiftPreset(-1)} aria-label="Предыдущий бит">‹</button>
-            <button className="preset-btn" onClick={() => shiftPreset(1)} aria-label="Следующий бит">›</button>
           </div>
           <div className="tempo">
             <button className="tempo-btn" onClick={() => bumpBpm(-4)} aria-label="Темп ниже">−</button>
