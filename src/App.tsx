@@ -567,7 +567,10 @@ export default function App() {
           </div>
           <div className="tempo">
             <button className="tempo-btn" onClick={() => bumpBpm(-4)} aria-label="Темп ниже">−</button>
-            <span className="tempo-val">{bpm}</span>
+            <div className="tempo-stack">
+              <span className="tempo-val">{bpm}</span>
+              <span className="tempo-unit">BPM</span>
+            </div>
             <button className="tempo-btn" onClick={() => bumpBpm(4)} aria-label="Темп выше">+</button>
           </div>
         </div>

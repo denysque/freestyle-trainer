@@ -890,14 +890,32 @@ a { color: inherit; }
   justify-content: center;
 }
 
+.tempo-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 32px;
+  line-height: 1;
+}
+
 .tempo-val {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-text);
   font-variant-numeric: tabular-nums;
   font-weight: 700;
-  min-width: 28px;
   text-align: center;
+  line-height: 1.1;
+}
+
+.tempo-unit {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 500;
+  color: var(--color-muted);
+  letter-spacing: 0.14em;
+  line-height: 1;
+  margin-top: 1px;
 }
 
 /* ───────────────────────────── A11Y / RESPONSIVE ──────────────────────── */
@@ -919,8 +937,10 @@ a { color: inherit; }
   .record-btn.on { animation: none !important; }
 }
 
-@media (max-width: 420px) {
-  .app::before, .app::after { font-size: 8px; }
+@media (max-width: 480px) {
+  /* На мобильных декоративные углы не помещаются — убираем чтобы не наезжали на header */
+  .app::before, .app::after { display: none; }
+  .header { padding-top: 6px; }
   .player-inner { gap: 6px; }
   .player-btn { width: 40px; height: 40px; }
 }
